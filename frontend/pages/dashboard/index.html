@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Автопарк - Система управления</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                Система управления автопарком
+            </div>
+                <div id="user-info" class="u-info">
+            </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <div id="navigation-container"></div>
+    <div class="main-container">
+        <h1 class="page-title">Планирование ресурсов</h1>
+        <div class="breadcrumb">Главная / Планирование ресурсов</div>
+
+    
+    <!-- Loading State -->
+    <div id="loading-state" style="display: none;">
+        <!-- Ваш существующий код загрузки -->
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Автомобили</h3>
+                </div>
+                <div class="card-body"></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Водители</h3>
+                </div>
+                <div class="card-body"></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Заказы</h3>
+                </div>
+                <div class="card-body"></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Расходы</h3>
+                </div>
+                <div class="card-body"></div>
+            </div>
+        </div>
+        
+        <!-- Карточка активности -->
+       <div class="card activity-card">
+            <div class="card-header">
+                <h3>Последние события</h3>
+            </div>
+            <div class="card-body"></div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Подключение скрипта -->
+    <script src="../../assets/js/modules/dashboard.js"></script>
+
+        <!-- Scripts -->
+        <script src="../../assets/js/api.js"></script>
+        <script src="../../assets/js/navigation.js"></script>
+        <!-- <script src="../../assets/js/modules/dashboard.js"></script> -->
+
+        <script>
+            Navigation.createNavigation('navigation-container');
+            Navigation.displayUserInfo();
+
+            class OptimizedDashboard {
+                constructor() {
+                    this.apiUrl = '/api/dashboard/overview';
+                    this.refreshInterval = 60000; // 1 минута
+                    this.refreshTimer = null;
+                    this.isLoading = false;
+                    this.init();
+                }
+
+                async init() {
+                    try {
+                        console.log('Инициализация Dashboard...');
+                        
+                        // Проверяем авторизацию
+                        if (!this.checkAuth()) {
+                            return;
+                        }
+                        
+                        // Первоначальная загрузка данных
+                        await this.loadDashboardData();
+                        
+                        // Запускаем автообновление
+                        this.startAutoRefresh();
+                        
+                        console.log('Dashboard инициализирован успешно');
+                    } catch (error) {
+                        console.error('Ошибка инициализации:', error);
+                        this.showError('Ошибка загрузки панели управления');
+                    }
+                }
+
+                checkAuth() {
+                    const user = sessionStorage.getItem('user');
+                    if (!user) {
+                        window.location.href = '/pages/auth/index.html';
+                        return false;
+                    }
+                    return true;
+                }
+
+                async loadDashboardData() {
+                    if (this.isLoading) return;
+                    
+                    try {
+                        this.isLoading = true;
+                        this.showLoading(true);
+                        
+                        const response = await fetch(this.apiUrl, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${sessionStorage.getItem('token') || ''}`
+                            }
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            this.updateDashboard(result.data);
+                        } else {
+                            throw new Error(result.message || 'Ошибка получения данных');
+                        }
+                        
+                    } catch (error) {
+                        console.error('Ошибка загрузки данных:', error);
+                        this.showError('Не удалось загрузить данные: ' + error.message);
+                    } finally {
+                        this.isLoading = false;
+                        this.showLoading(false);
+                    }
+                }
+
+                updateDashboard(data) {
+                    try {
+                        // Обновляем карточки
+                        this.updateCarsCard(data.cars);
+                        this.updateDriversCard(data.drivers);
+                        this.updateOrdersCard(data.orders); // Исправленная версия
+                        this.updateExpensesCard(data.expenses); // Исправленная версия
+                        this.updateRecentActivity(data.recentActivity);
+                        
+                        console.log('Dashboard обновлен успешно');
+                    } catch (error) {
+                        console.error('Ошибка обновления dashboard:', error);
+                    }
+                }
+
+                updateCarsCard(carsData) {
+                    const cardBody = document.querySelector('.dashboard-grid .card:nth-child(1) .card-body');
+                    if (!cardBody) return;
+
+                    const totalCars = carsData.total || 0;
+                    const inUse = carsData.inUse || 0;
+                    const maintenance = carsData.maintenance || 0;
+                    const repair = carsData.repair || 0;
+                    const available = carsData.available || 0;
+
+                    cardBody.innerHTML = `
+                        <div class="card-stat">
+                            <div>
+                                <div class="stat-value">${totalCars}</div>
+                                <div class="stat-label">Всего автомобилей</div>
+                            </div>
+                            <div class="stat-icon">🚗</div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                            <span class="status status-success" title="Автомобили в работе">${inUse} в работе</span>
+                            <span class="status status-warning" title="Автомобили на ТО">${maintenance} на ТО</span>
+                            <span class="status status-error" title="Автомобили в ремонте">${repair} в ремонте</span>
+                            <span class="status status-info" title="Доступные автомобили">${available} доступно</span>
+                        </div>
+                    `;
+                }
+
+                updateDriversCard(driversData) {
+                    const cardBody = document.querySelector('.dashboard-grid .card:nth-child(2) .card-body');
+                    if (!cardBody) return;
+
+                    const total = driversData.total || 0;
+                    const allowed = driversData.allowed || 0;
+                    const notAllowed = driversData.notAllowed || 0;
+
+                    cardBody.innerHTML = `
+                        <div class="card-stat">
+                            <div>
+                                <div class="stat-value">${total}</div>
+                                <div class="stat-label">Всего водителей</div>
+                            </div>
+                            <div class="stat-icon">👤</div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                            <span class="status status-success" title="Допущенные к работе">${allowed} допущены</span>
+                            <span class="status status-error" title="Не допущенные к работе">${notAllowed} не допущены</span>
+                        </div>
+                    `;
+                }
+
+                updateOrdersCard(ordersData) {
+                    const cardBody = document.querySelector('.dashboard-grid .card:nth-child(3) .card-body');
+                    if (!cardBody) return;
+
+                    const total = ordersData.total || 0;
+                    const completed = ordersData.completed || 0;
+                    const inProgress = ordersData.inprogress || 0; // Исправлено: используем inprogress
+                    const createdToday = ordersData.createdtoday || 0; // Исправлено: используем createdtoday
+                    const revenue = parseFloat(ordersData.revenue || 0);
+
+                    cardBody.innerHTML = `
+                        <div class="card-stat">
+                            <div>
+                                <div class="stat-value">${total}</div>
+                                <div class="stat-label">Заказов всего</div>
+                            </div>
+                            <div class="stat-icon">📋</div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                            <span class="status status-success" title="Выполненные заказы">${completed} выполнено</span>
+                            <span class="status status-warning" title="Заказы в работе">${inProgress} в работе</span>
+                            <span class="status status-info" title="Созданные сегодня">${createdToday} создано сегодня</span>
+                        </div>
+                        <div style="margin-top: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">
+                            <small style="color: #666;">Доход: <strong>₽${this.formatNumber(revenue)}</strong></small>
+                        </div>
+                    `;
+                }
+
+                updateExpensesCard(expensesData) {
+                    const cardBody = document.querySelector('.dashboard-grid .card:nth-child(4) .card-body');
+                    if (!cardBody) return;
+
+                    const total = parseFloat(expensesData.total || 0);
+                    const fuel = parseFloat(expensesData.fuel || 0);
+                    const maintenance = parseFloat(expensesData.maintenance || 0);
+                    const repair = parseFloat(expensesData.repair || 0);
+                    const trend = expensesData.trend || '0%';
+
+                    // Определяем цвет тренда
+                    const trendColor = trend.includes('-') ? '#27ae60' : '#e74c3c';
+                    const trendIcon = trend.includes('-') ? '↓' : '↑';
+
+                    cardBody.innerHTML = `
+                        <div class="card-stat">
+                            <div>
+                                <div class="stat-value">₽${this.formatNumber(total)}</div>
+                                <div class="stat-label">Общие расходы</div>
+                            </div>
+                            <div class="stat-icon">💰</div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                            <span class="status status-info" title="Расходы на топливо">Топливо: ₽${this.formatNumber(fuel)}</span>
+                            <span class="status status-warning" title="Расходы на ТО">ТО: ₽${this.formatNumber(maintenance)}</span>
+                            <span class="status status-error" title="Расходы на ремонт">Ремонт: ₽${this.formatNumber(repair)}</span>
+                        </div>
+                        <div style="margin-top: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">
+                            <small style="color: ${trendColor};">${trendIcon} Тренд: <strong>${trend}</strong></small>
+                        </div>
+                    `;
+                }
+
+                updateRecentActivity(activities) {
+                    const activityCard = document.querySelector('.activity-card .card-body');
+                    if (!activityCard) return;
+
+                    if (!activities || activities.length === 0) {
+                        activityCard.innerHTML = '<div class="no-data">Нет недавних событий</div>';
+                        return;
+                    }
+
+                    const activitiesHTML = activities.map(activity => {
+                        const icon = this.getActivityIcon(activity.type);
+                        const time = new Date(activity.created_at).toLocaleString('ru-RU');
+                        
+                        return `
+                            <div class="activity-item" style="
+                                padding: 0.75rem; 
+                                background: #f8f9fa; 
+                                border-radius: 4px; 
+                                margin-bottom: 0.5rem;
+                                border-left: 3px solid #3498db;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            ">
+                                <span style="font-size: 16px;">${icon}</span>
+                                <div style="flex: 1; font-size: 14px;">
+                                    <div>${activity.description}</div>
+                                    <small style="color: #666;">${time}</small>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    activityCard.innerHTML = activitiesHTML;
+                }
+
+                getActivityIcon(type) {
+                    const icons = {
+                        'order': '📋',
+                        'car': '🚗',
+                        'maintenance': '🔧',
+                        'driver': '👤',
+                        'repair': '🔨',
+                        'fuel': '⛽',
+                        'medical': '🏥',
+                        'default': '📝'
+                    };
+                    return icons[type] || icons.default;
+                }
+
+                formatNumber(num) {
+                    return new Intl.NumberFormat('ru-RU').format(num);
+                }
+
+                showLoading(show) {
+                    const loadingState = document.getElementById('loading-state');
+                    const dashboardContent = document.querySelector('.dashboard-grid');
+                    
+                    if (show) {
+                        if (loadingState) loadingState.style.display = 'block';
+                        if (dashboardContent) dashboardContent.style.opacity = '0.5';
+                    } else {
+                        if (loadingState) loadingState.style.display = 'none';
+                        if (dashboardContent) dashboardContent.style.opacity = '1';
+                    }
+                }
+
+                showError(message) {
+                    // Простая реализация уведомления об ошибке
+                    alert('Ошибка: ' + message);
+                    console.error('Dashboard error:', message);
+                }
+
+                startAutoRefresh() {
+                    this.stopAutoRefresh();
+                    this.refreshTimer = setInterval(() => {
+                        this.loadDashboardData();
+                    }, this.refreshInterval);
+                }
+
+                stopAutoRefresh() {
+                    if (this.refreshTimer) {
+                        clearInterval(this.refreshTimer);
+                        this.refreshTimer = null;
+                    }
+                }
+
+                destroy() {
+                    this.stopAutoRefresh();
+                }
+            }
+
+            // Инициализация при загрузке страницы
+            document.addEventListener('DOMContentLoaded', () => {
+                window.dashboard = new OptimizedDashboard();
+            });
+
+            // Обработка выгрузки страницы
+            window.addEventListener('beforeunload', () => {
+                if (window.dashboard) {
+                    window.dashboard.destroy();
+                }
+            });
+    </script>
+</body>
+</html>

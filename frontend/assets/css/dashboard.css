@@ -1,0 +1,171 @@
+.loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 4px;
+    height: 20px;
+    margin: 5px 0;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.stat-trend {
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.stat-trend.up {
+    color: #27ae60;
+}
+
+.stat-trend.down {
+    color: #e74c3c;
+}
+
+.stat-trend::before {
+    content: "↗";
+    margin-right: 3px;
+}
+
+.stat-trend.down::before {
+    content: "↘";
+}
+
+.chart-container {
+    height: 200px;
+    margin-top: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.summary-item {
+    text-align: center;
+}
+
+.summary-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.summary-label {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+}
+
+.refresh-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    font-size: 18px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.refresh-button:hover {
+    background: #2980b9;
+    transform: scale(1.1);
+}
+
+.refresh-button.spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.data-error {
+    background: #fadbd8;
+    color: #e74c3c;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.data-empty {
+    background: #f8f9fa;
+    color: #666;
+    padding: 2rem;
+    border-radius: 4px;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.activity-filters {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.activity-filter {
+    padding: 0.3rem 0.8rem;
+    background: #ecf0f1;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.activity-filter.active {
+    background: #3498db;
+    color: white;
+}
+
+.activity-filter:hover {
+    background: #d5dbdb;
+}
+
+.activity-filter.active:hover {
+    background: #2980b9;
+}
+
+.status {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-success { background: #27ae60; color: white; }
+.status-warning { background: #f39c12; color: white; }
+.status-error { background: #e74c3c; color: white; }
+.status-info { background: #3498db; color: white; }
+
+.activity-card {
+    /* Добавьте класс для карточки активности */
+}
+
+.no-data {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-style: italic;
+}

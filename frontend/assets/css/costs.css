@@ -1,0 +1,51 @@
+/* Дополнительные стили для страницы экономики автопарка */
+/* Эти стили отличаются от базового style.css или являются специфичными для этой страницы */
+
+/* Table Styles - отсутствуют в базовом CSS */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.data-table th,
+.data-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.data-table th {
+    background: #f8f9fa;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.data-table tr:hover {
+    background: #f8f9fa;
+}
+
+/* Progress bars - отсутствуют в базовом CSS */
+.progress-bar {
+    background: #ecf0f1;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* Переопределение hover эффекта для карточек - в базовом CSS есть другой эффект */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    /* Убираем hover эффект для страницы экономики */
+    transform: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>График работы - Система управления автопарком</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/schedule.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                Система управления автопарком
+            </div>
+            <div id="user-info" class="u-info"></div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <div id="navigation-container"></div>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <h1 class="page-title">График работы водителей</h1>
+        <div class="breadcrumb">Главная / График работы</div>
+
+        <!-- Controls -->
+        <div class="schedule-controls">
+            <div class="control-group">
+                <label class="control-label">Период планирования</label>
+                <select class="control-input" id="periodSelect">
+                    <option value="week">Неделя</option>
+                    <option value="month">Месяц</option>
+                    <option value="day">День</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label">Начальная дата</label>
+                <input type="date" class="control-input" id="startDate" value="2025-06-16">
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label">Конечная дата</label>
+                <input type="date" class="control-input" id="endDate" value="2025-06-22">
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label">&nbsp;</label>
+                <button class="btn" onclick="loadSchedule()">Обновить</button>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label">&nbsp;</label>
+                <button class="btn btn-success" onclick="openNewScheduleModal()">Создать расписание</button>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-title">Обозначения</div>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #3498db;"></div>
+                    <span>Дневная смена (08:00-16:00)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f39c12;"></div>
+                    <span>Утренняя смена (06:00-14:00)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #9b59b6;"></div>
+                    <span>Вечерняя смена (16:00-00:00)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #34495e;"></div>
+                    <span>Ночная смена (00:00-08:00)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Table -->
+        <div class="schedule-table">
+            <div class="table-header">
+                <span>График работы (16.06.2025 - 22.06.2025)</span>
+                <span>Всего водителей: 15</span>
+            </div>
+            
+            <div class="schedule-grid">
+                <!-- Header -->
+                <div class="grid-header">Водитель</div>
+                <div class="grid-header">Пн<br>16.06</div>
+                <div class="grid-header">Вт<br>17.06</div>
+                <div class="grid-header">Ср<br>18.06</div>
+                <div class="grid-header">Чт<br>19.06</div>
+                <div class="grid-header">Пт<br>20.06</div>
+                <div class="grid-header">Сб<br>21.06</div>
+                <div class="grid-header">Вс<br>22.06</div>
+
+                <!-- Drivers and their schedules -->
+                <div class="driver-name">
+                    <span class="driver-status status-available"></span>
+                    Иванов И.И.
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block">08:00-16:00<br>A123BC777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block">08:00-16:00<br>A123BC777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block">08:00-16:00<br>A123BC777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block">08:00-16:00<br>A123BC777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block">08:00-16:00<br>A123BC777</div>
+                </div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+
+                <div class="driver-name">
+                    <span class="driver-status status-available"></span>
+                    Петров П.П.
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-morning">06:00-14:00<br>B456CD777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-morning">06:00-14:00<br>B456CD777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-morning">06:00-14:00<br>B456CD777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-morning">06:00-14:00<br>B456CD777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-morning">06:00-14:00<br>B456CD777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-morning">06:00-14:00<br>B456CD777</div>
+                </div>
+                <div class="grid-cell"></div>
+
+                <div class="driver-name">
+                    <span class="driver-status status-available"></span>
+                    Сидоров С.С.
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-evening">16:00-00:00<br>C789DE777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-evening">16:00-00:00<br>C789DE777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-evening">16:00-00:00<br>C789DE777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-evening">16:00-00:00<br>C789DE777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-evening">16:00-00:00<br>C789DE777</div>
+                </div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+
+                <div class="driver-name">
+                    <span class="driver-status status-busy"></span>
+                    Козлов К.К.
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-night">00:00-08:00<br>D123EF777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-night">00:00-08:00<br>D123EF777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-night">00:00-08:00<br>D123EF777</div>
+                </div>
+                <div class="grid-cell">
+                    <div class="shift-block shift-night">00:00-08:00<br>D123EF777</div>
+                </div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+
+                <div class="driver-name">
+                    <span class="driver-status status-vacation"></span>
+                    Николаев Н.Н.
+                </div>
+                <div class="grid-cell" style="background: #fff3cd;"><span style="color: #856404; font-size: 0.8rem;">Отпуск</span></div>
+                <div class="grid-cell" style="background: #fff3cd;"><span style="color: #856404; font-size: 0.8rem;">Отпуск</span></div>
+                <div class="grid-cell" style="background: #fff3cd;"><span style="color: #856404; font-size: 0.8rem;">Отпуск</span></div>
+                <div class="grid-cell" style="background: #fff3cd;"><span style="color: #856404; font-size: 0.8rem;">Отпуск</span></div>
+                <div class="grid-cell" style="background: #fff3cd;"><span style="color: #856404; font-size: 0.8rem;">Отпуск</span></div>
+                <div class="grid-cell" style="background: #fff3cd;"><span style="color: #856404; font-size: 0.8rem;">Отпуск</span></div>
+                <div class="grid-cell" style="background: #fff3cd;"><span style="color: #856404; font-size: 0.8rem;">Отпуск</span></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for creating new schedule -->
+    <div class="modal" id="newScheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Создать новое расписание</div>
+                <button class="close-btn" onclick="closeModal('newScheduleModal')">&times;</button>
+            </div>
+            
+            <form id="scheduleForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Дата начала</label>
+                        <input type="date" name="start_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Дата окончания</label>
+                        <input type="date" name="end_date" required>
+                    </div>
+                </div>
+        
+    <script src="../../assets/js/navigation.js"></script>
+    <script>
+    // Создаст навигацию автоматически
+        Navigation.createNavigation('navigation-container');
+        Navigation.displayUserInfo();
+    </script>

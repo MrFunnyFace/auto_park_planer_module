@@ -1,0 +1,205 @@
+/* Дополнительные стили для страницы авторизации */
+/* Эти стили отличаются от базового style.css */
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 400px;
+    margin: 2rem;
+}
+
+.auth-header {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.auth-logo {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+.auth-form {
+    padding: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+}
+
+.checkbox-label {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.auth-button {
+    width: 100%;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.forgot-password {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.forgot-password a {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.role-selector {
+    margin-bottom: 1.5rem;
+}
+
+.role-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.role-btn {
+    flex: 1;
+    padding: 0.6rem;
+    border: 2px solid #e0e0e0;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.role-btn.active {
+    border-color: #3498db;
+    background: #3498db;
+    color: white;
+}
+
+.role-btn:hover {
+    border-color: #3498db;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.alert-error {
+    background: #fadbd8;
+    color: #e74c3c;
+    border: 1px solid #f1948a;
+}
+
+.alert-success {
+    background: #d5f4e6;
+    color: #27ae60;
+    border: 1px solid #82e0aa;
+}
+
+.system-info {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.system-info h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.system-info p {
+    color: #7f8c8d;
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        margin: 1rem;
+    }
+    
+    .auth-header {
+        padding: 1.5rem;
+    }
+    
+    .auth-form {
+        padding: 1.5rem;
+    }
+}

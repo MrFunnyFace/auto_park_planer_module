@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Автопарк - Управление маршрутами</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/routes.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                Система управления автопарком
+            </div>
+            <div id="user-info" class="u-info"></div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <div id="navigation-container"></div>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <h1 class="page-title">Управление маршрутами</h1>
+        <div class="breadcrumb">Главная / Управление маршрутами</div>
+
+        <!-- Map Section -->
+        <div class="map-container">
+            <div class="map-placeholder">
+                🗺️ Интерактивная карта маршрутов и зон
+                <br><small>(Здесь будет подключена карта через API)</small>
+            </div>
+            <div class="map-controls">
+                <div class="control-group">
+                    <label>Вид карты:</label>
+                    <select id="mapType">
+                        <option value="road">Дороги</option>
+                        <option value="satellite">Спутник</option>
+                        <option value="hybrid">Гибрид</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Показать:</label>
+                    <select id="showLayer">
+                        <option value="routes">Маршруты</option>
+                        <option value="zones">Зоны</option>
+                        <option value="both">Всё</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Поиск:</label>
+                    <input type="text" id="searchLocation" placeholder="Введите адрес...">
+                </div>
+                <button class="btn btn-primary" onclick="openRouteModal()">Добавить маршрут</button>
+                <button class="btn btn-success" onclick="openZoneModal()">Создать зону</button>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="routes-grid">
+            <!-- Routes List -->
+            <div class="routes-list">
+                <div class="routes-header">
+                    <h3>Активные маршруты</h3>
+                    <span class="status status-online">12 маршрутов</span>
+                </div>
+                
+                <div class="route-item">
+                    <div class="route-name">Маршрут №1: Центр - Промзона</div>
+                    <div class="route-details">
+                        <span>📍 15.2 км</span>
+                        <span>⏱️ 32 мин</span>
+                        <span>🚛 Грузовые</span>
+                    </div>
+                    <div class="route-actions">
+                        <button class="btn btn-primary btn-small">Редактировать</button>
+                        <button class="btn btn-warning btn-small">Оптимизировать</button>
+                        <button class="btn btn-danger btn-small">Удалить</button>
+                    </div>
+                </div>
+
+                <div class="route-item">
+                    <div class="route-name">Маршрут №2: Склад - Магазины</div>
+                    <div class="route-details">
+                        <span>📍 28.7 км</span>
+                        <span>⏱️ 45 мин</span>
+                        <span>🚐 Легковые</span>
+                    </div>
+                    <div class="route-actions">
+                        <button class="btn btn-primary btn-small">Редактировать</button>
+                        <button class="btn btn-warning btn-small">Оптимизировать</button>
+                        <button class="btn btn-danger btn-small">Удалить</button>
+                    </div>
+                </div>
+
+                <div class="route-item">
+                    <div class="route-name">Маршрут №3: Аэропорт - Гостиницы</div>
+                    <div class="route-details">
+                        <span>📍 42.1 км</span>
+                        <span>⏱️ 55 мин</span>
+                        <span>🚙 Микроавтобусы</span>
+                    </div>
+                    <div class="route-actions">
+                        <button class="btn btn-primary btn-small">Редактировать</button>
+                        <button class="btn btn-warning btn-small">Оптимизировать</button>
+                        <button class="btn btn-danger btn-small">Удалить</button>
+                    </div>
+                </div>
+
+                <div class="route-item">
+                    <div class="route-name">Маршрут №4: Офисы - Банки</div>
+                    <div class="route-details">
+                        <span>📍 18.5 км</span>
+                        <span>⏱️ 38 мин</span>
+                        <span>🚗 Легковые</span>
+                    </div>
+                    <div class="route-actions">
+                        <button class="btn btn-primary btn-small">Редактировать</button>
+                        <button class="btn btn-warning btn-small">Оптимизировать</button>
+                        <button class="btn btn-danger btn-small">Удалить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zones Panel -->
+            <div class="zones-panel">
+                <div class="zones-header">
+                    <h3>Зоны проезда</h3>
+                </div>
+                
+                <div class="zone-item">
+                    <div class="zone-type zone-allowed">Разрешенная зона</div>
+                    <div><strong>Центральный район</strong></div>
+                    <div class="route-details" style="margin-top: 0.5rem;">
+                        <span>Круглосуточно</span>
+                        <span>Все ТС</span>
+                    </div>
+                </div>
+
+                <div class="zone-item">
+                    <div class="zone-type zone-restricted">Ограниченная зона</div>
+                    <div><strong>Пешеходная зона</strong></div>
+                    <div class="route-details" style="margin-top: 0.5rem;">
+                        <span>06:00-22:00</span>
+                        <span>Только легковые</span>
+                    </div>
+                </div>
+
+                <div class="zone-item">
+                    <div class="zone-type zone-forbidden">Запрещенная зона</div>
+                    <div><strong>Промышленная зона</strong></div>
+                    <div class="route-details" style="margin-top: 0.5rem;">
+                        <span>Постоянно</span>
+                        <span>Легковые запрещены</span>
+                    </div>
+                </div>
+
+                <div class="zone-item">
+                    <div class="zone-type zone-restricted">Ограниченная зона</div>
+                    <div><strong>Жилой район</strong></div>
+                    <div class="route-details" style="margin-top: 0.5rem;">
+                        <span>22:00-06:00</span>
+                        <span>Тихий режим</span>
+                    </div>
+                </div>
+
+                <div class="zone-item">
+                    <div class="zone-type zone-allowed">Разрешенная зона</div>
+                    <div><strong>Магистрали</strong></div>
+                    <div class="route-details" style="margin-top: 0.5rem;">
+                        <span>Круглосуточно</span>
+                        <span>Грузовые разрешены</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Route Modal -->
+    <div id="routeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Создать новый маршрут</h3>
+                <button class="close" onclick="closeModal('routeModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="routeForm">
+                    <div class="form-group">
+                        <label>Название маршрута</label>
+                        <input type="text" id="routeName" placeholder="Введите название маршрута">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Начальная точка</label>
+                        <input type="text" id="startPoint" placeholder="Введите адрес начальной точки">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Конечная точка</label>
+                        <input type="text" id="endPoint" placeholder="Введите адрес конечной точки">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Промежуточные точки</label>
+                        <textarea id="waypoints" placeholder="Введите промежуточные адреса (каждый с новой строки)"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Тип транспорта</label>
+                        <select id="vehicleType">
+                            <option value="all">Все типы</option>
+                            <option value="car">Легковые</option>
+                            <option value="van">Микроавтобусы</option>
+                            <option value="truck">Грузовые</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Максимальный вес (тонн)</label>
+                        <input type="number" id="maxWeight" placeholder="Введите максимальный вес">
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button type="button" class="btn btn-primary" onclick="calculateRoute()">Рассчитать маршрут</button>
+                        <button type="button" class="btn btn-success" onclick="saveRoute()">Сохранить</button>
+                        <button type="button" class="btn" onclick="closeModal('routeModal')" style="background: #95a5a6; color: white;">Отмена</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone Modal -->
+    <div id="zoneModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Создать новую зону</h3>
+                <button class="close" onclick="closeModal('zoneModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="zoneForm">
+                    <div class="form-group">
+                        <label>Название зоны</label>
+                        <input type="text" id="zoneName" placeholder="Введите название зоны">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Тип зоны</label>
+                        <select id="zoneType">
+                            <option value="allowed">Разрешенная зона</option>
+                            <option value="restricted">Ограниченная зона</option>
+                            <option value="forbidden">Запрещенная зона</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Время действия</label>
+                        <select id="zoneTime">
+                            <option value="always">Круглосуточно</option>
+                            <option value="day">Только днем (06:00-22:00)</option>
+                            <option value="night">Только ночью (22:00-06:00)</option>
+                            <option value="custom">Указать время</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Разрешенные ТС</label>
+                        <select id="allowedVehicles">
+                            <option value="all">Все типы</option>
+                            <option value="car">Только легковые</option>
+                            <option value="light">Легкий транспорт</option>
+                            <option value="heavy">Тяжелый транспорт</option>
+                            <option value="none">Запрещены все</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Описание ограничений</label>
+                        <textarea id="zoneDescription" placeholder="Опишите особенности и ограничения зоны"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button type="button" class="btn btn-success" onclick="saveZone()">Создать зону</button>
+                        <button type="button" class="btn" onclick="closeModal('zoneModal')" style="background: #95a5a6; color: white;">Отмена</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Система управления автопарком. Все права защищены.</p>
+    </footer>
+    <script src="../../assets/js/navigation.js"></script>
+
+    <script>
+        // Создаст навигацию автоматически
+        Navigation.createNavigation('navigation-container');
+        Navigation.displayUserInfo();
+    </script>
+    
+    <script>
+        // Модальные окна
+        function openRouteModal() {
+            document.getElementById('routeModal').style.display = 'block';
+        }
+
+        function openZoneModal() {
+            document.getElementById('zoneModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Закрытие модальных окон по клику вне них
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Функции для работы с маршрутами
+        function calculateRoute() {
+            const startPoint = document.getElementById('startPoint').value;
+            const endPoint = document.getElementById('endPoint').value;
+            
+            if (!startPoint || !endPoint) {
+                alert('Пожалуйста, укажите начальную и конечную точки');
+                return;
+            }
+            
+            // Здесь будет логика расчета маршрута через API карт
+            alert('Маршрут рассчитан! Расстояние: 15.2 км, время в пути: 32 минуты');
+        }
+
+        function saveRoute() {
+            const routeName = document.getElementById('routeName').value;
+            if (!routeName) {
+                alert('Пожалуйста, введите название маршрута');
+                return;
+            }
+            
+            // Здесь будет логика сохранения маршрута
+            alert('Маршрут "' + routeName + '" успешно сохранен!');
+            closeModal('routeModal');
+            
+            // Очистка формы
+            document.getElementById('routeForm').reset();
+        }
+
+        function saveZone() {
+            const zoneName = document.getElementById('zoneName').value;
+            if (!zoneName) {
+                alert('Пожалуйста, введите название зоны');
+                return;
+            }
+            
+            // Здесь будет логика сохранения зоны
+            alert('Зона "' + zoneName + '" успешно создана!');
+            closeModal('zoneModal');
+            
+            // Очистка формы
+            document.getElementById('zoneForm').reset();
+        }
+
+        // Переключение слоев карты
+        document.getElementById('showLayer').addEventListener('change', function() {
+            const layer = this.value;
+            console.log('Переключение на слой:', layer);
+            // Здесь будет логика переключения отображения на карте
+        });
+
+        // Поиск на карте
+        document.getElementById('searchLocation').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const location = this.value;
+                console.log('Поиск локации:', location);
+                // Здесь будет логика поиска на карте
+            }
+        });
+    </script>
+</body>
+</html>

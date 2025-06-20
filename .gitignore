@@ -1,0 +1,6 @@
+.env
+/DB/BACK_UP
+/DB/PostgresSQL
+select.sql
+/.doc/
+/backend/.env

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ эффективности - Система управления автопарком</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                Система управления автопарком
+            </div>
+            <div id="user-info" class="u-info"></div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <div id="navigation-container"></div>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <h1 class="page-title">Панель управления</h1>
+        <div class="breadcrumb">Главная / Панель управления</div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">Автомобили</div>
+                <div class="card-body">
+                    <div class="card-stat">
+                        <div>
+                            <div class="stat-value">...</div>
+                            <div class="stat-label">Загрузка данных...</div>
+                        </div>
+                        <div class="stat-icon">🚗</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Водители</div>
+                <div class="card-body">
+                    <div class="card-stat">
+                        <div>
+                            <div class="stat-value">...</div>
+                            <div class="stat-label">Загрузка данных...</div>
+                        </div>
+                        <div class="stat-icon">👤</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Заказы сегодня</div>
+                <div class="card-body">
+                    <div class="card-stat">
+                        <div>
+                            <div class="stat-value">...</div>
+                            <div class="stat-label">Загрузка данных...</div>
+                        </div>
+                        <div class="stat-icon">📋</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Расходы за месяц</div>
+                <div class="card-body">
+                    <div class="card-stat">
+                        <div>
+                            <div class="stat-value">...</div>
+                            <div class="stat-label">Загрузка данных...</div>
+                        </div>
+                        <div class="stat-icon">💰</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h3>Быстрые действия</h3>
+            <div class="actions-grid">
+                <a href="#schedule-new" class="action-btn">
+                    <span class="action-btn-icon">📅</span>
+                    <div>Создать расписание</div>
+                </a>
+                <a href="#order-new" class="action-btn">
+                    <span class="action-btn-icon">📝</span>
+                    <div>Новый заказ</div>
+                </a>
+                <a href="#route-new" class="action-btn">
+                    <span class="action-btn-icon">🗺️</span>
+                    <div>Создать маршрут</div>
+                </a>
+                <a href="#report-costs" class="action-btn">
+                    <span class="action-btn-icon">📊</span>
+                    <div>Отчет по расходам</div>
+                </a>
+                <a href="#limits-set" class="action-btn">
+                    <span class="action-btn-icon">⚠️</span>
+                    <div>Установить лимиты</div>
+                </a>
+                <a href="#analytics" class="action-btn">
+                    <span class="action-btn-icon">📈</span>
+                    <div>Анализ эффективности</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+            <div class="card-header">Последние события</div>
+            <div class="card-body">
+                <div class="no-data">Загрузка последних событий...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Система управления автопарком. Все права защищены.</p>
+    </footer>
+    <script src="../../assets/js/navigation.js"></script>
+
+    <script>
+        // Создаст навигацию автоматически
+        Navigation.createNavigation('navigation-container');
+        Navigation.displayUserInfo();
+    </script>
+    
+    <script>
+        // Интерактивность кнопок фильтров
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                if (this.style.background !== 'rgb(52, 152, 219)') {
+                    this.style.background = '#bdc3c7';
+                }
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                if (this.style.background !== 'rgb(52, 152, 219)') {
+                    this.style.background = '#ecf0f1';
+                }
+            });
+        });
+
+        // Обновление данных (имитация)
+        function updateAnalytics() {
+            // Здесь будет логика обновления данных через API
+            console.log('Обновление аналитических данных...');
+        }
+
+        // Автообновление каждые 5 минут
+        setInterval(updateAnalytics, 300000);
+    </script>
+</body>
+</html>

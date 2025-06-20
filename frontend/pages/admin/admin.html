@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Management Backend Tester</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .config-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #3498db;
+        }
+
+        .config-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #2c3e50 100%);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .test-results {
+            margin-top: 30px;
+        }
+
+        .test-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #95a5a6;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .test-item:hover {
+            transform: translateX(5px);
+        }
+
+        .test-item.success {
+            border-left-color: #27ae60;
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.05) 0%, rgba(39, 174, 96, 0.02) 100%);
+        }
+
+        .test-item.error {
+            border-left-color: #e74c3c;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.05) 0%, rgba(231, 76, 60, 0.02) 100%);
+        }
+
+        .test-item.running {
+            border-left-color: #f39c12;
+            background: linear-gradient(135deg, rgba(243, 156, 18, 0.05) 0%, rgba(243, 156, 18, 0.02) 100%);
+        }
+
+        .test-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .test-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: #95a5a6;
+        }
+
+        .test-status.success {
+            background: #27ae60;
+        }
+
+        .test-status.error {
+            background: #e74c3c;
+        }
+
+        .test-status.running {
+            background: #f39c12;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .test-title {
+            font-weight: 600;
+            color: #2c3e50;
+            flex-grow: 1;
+        }
+
+        .test-time {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .test-details {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .test-response {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .progress-bar {
+            background: #e1e8ed;
+            border-radius: 10px;
+            height: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid #3498db;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .collapse-btn {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+
+        .error-logs {
+            background: #2c3e50;
+            color: #e74c3c;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .instructions {
+            background: #e8f4f8;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border-left: 5px solid #3498db;
+        }
+
+        .instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .copy-btn {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover {
+            background: #7f8c8d;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 Fleet Management Backend Tester</h1>
+            <p>Комплексное тестирование API панели управления автопарком</p>
+        </div>
+    <div id="navigation-container"></div>
+
+        <div class="main-content">
+            <!-- Конфигурация -->
+            <div class="config-section">
+                <h3>⚙️ Конфигурация тестирования</h3>
+                <div class="form-group">
+                    <label for="baseUrl">Base URL вашего API:</label>
+                    <input type="text" id="baseUrl" value="http://localhost:8080/api" placeholder="http://localhost:8080/api">
+                </div>
+                <div class="form-group">
+                    <label for="testToken">Токен авторизации (если есть):</label>
+                    <input type="text" id="testToken" placeholder="Bearer token или оставьте пустым">
+                </div>
+                <button class="btn" onclick="runAllTests()"> Запустить все тесты</button>
+                <button class="btn btn-success" onclick="runBasicTests()"> Базовые тесты</button>
+                <button class="btn btn-danger" onclick="clearResults()"> Очистить результаты</button>
+                <button class="btn btn-success" onclick="downloadOverviewTxt()">Скачать Overview (PDF)</button>
+            </div>
+
+            <!-- Статистика -->
+            <div class="stats" id="stats" style="display: none;">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTests">0</div>
+                    <div class="stat-label">Всего тестов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="passedTests">0</div>
+                    <div class="stat-label">Успешно</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="failedTests">0</div>
+                    <div class="stat-label">Ошибок</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="testDuration">0</div>
+                    <div class="stat-label">Время (сек)</div>
+                </div>
+            </div>
+
+            <!-- Прогресс бар -->
+            <div class="progress-bar" id="progressBar" style="display: none;">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- Результаты тестов -->
+            <div class="test-results" id="testResults"></div>
+
+            <!-- Лог ошибок -->
+            <div id="errorLogsContainer" style="display: none;">
+                <h3>📋 Детальный лог ошибок для отправки разработчику:</h3>
+                <button class="copy-btn" onclick="copyErrorLogs()">📋 Копировать все ошибки</button>
+                <div class="error-logs" id="errorLogs"></div>
+            </div>
+
+            <!-- Инструкции -->
+            <div class="instructions">
+                <h3>📖 Инструкция по диагностике ошибок</h3>
+                <ol>
+                    <li><strong>Запустите тесты:</strong> Нажмите "Запустить все тесты" или "Базовые тесты"</li>
+                    <li><strong>Изучите результаты:</strong> Красные блоки показывают ошибки, зеленые - успешные тесты</li>
+                    <li><strong>Проверьте сервер:</strong> Убедитесь, что ваш PHP сервер запущен на указанном URL</li>
+                    <li><strong>Проверьте CORS:</strong> Если видите CORS ошибки, добавьте заголовки в PHP</li>
+                    <li><strong>Скопируйте ошибки:</strong> Используйте кнопку "Копировать все ошибки" и отправьте мне лог</li>
+                    <li><strong>Проверьте базу данных:</strong> Убедитесь, что соединение с БД работает</li>
+                    <li><strong>Логи PHP:</strong> Проверьте error_log вашего веб-сервера</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+  
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = sessionStorage.getItem('user');
+            if (!user || JSON.parse(user).role !== 'Admin') {
+                alert('Доступ запрещен: только для администраторов');
+                window.location.href = '/pages/dashboard/index.html';
+            }
+        });
+    </script>
+    <script src="../../assets/js/navigation.js"></script>
+    <script>
+        Navigation.createNavigation('navigation-container');
+        Navigation.displayUserInfo();       
+        let testResults = [];
+        let currentTestIndex = 0;
+        let startTime = 0;
+        let errorLogs = [];
+
+        const tests = [
+        {
+            name: 'Проверка доступности API',
+            url: '/', // Корень
+            method: 'GET',
+            critical: true,
+            description: 'Проверяем, что API сервер доступен'
+        },
+        {
+            name: 'Получение данных дашборда',
+            url: '/dashboard/overview?action=getDashboardData',
+            method: 'GET',
+            critical: true,
+            description: 'Тестируем основной endpoint дашборда'
+        },
+        {
+            name: 'Получение списка автомобилей',
+            url: '/dashboard/overview?action=getCars',
+            method: 'GET',
+            description: 'Проверяем получение данных об автомобилях'
+        },
+        {
+            name: 'Получение списка водителей',
+            url: '/dashboard/overview?action=getDrivers',
+            method: 'GET',
+            description: 'Проверяем получение данных о водителях'
+        },
+        {
+            name: 'Получение заказов',
+            url: '/dashboard/overview?action=getOrders',
+            method: 'GET',
+            description: 'Проверяем получение данных о заказах'
+        },
+        {
+            name: 'Получение расходов',
+            url: '/dashboard/overview?action=getExpenses',
+            method: 'GET',
+            description: 'Проверяем получение данных о расходах'
+        },
+        {
+            name: 'Получение последней активности',
+            url: '/dashboard/overview?action=getActivity',
+            method: 'GET',
+            description: 'Проверяем получение логов активности'
+        },
+        {
+            name: 'Тест неизвестного действия',
+            url: '/dashboard/overview?action=unknownAction',
+            method: 'GET',
+            description: 'Проверяем обработку неверных запросов',
+            expectError: true
+        },
+        {
+            name: 'OPTIONS запрос (CORS)',
+            url: '/dashboard/overview',
+            method: 'OPTIONS',
+            description: 'Проверяем поддержку CORS preflight запросов'
+        }
+    ];
+
+        const basicTests = [0, 1, 2]; // Индексы базовых тестов
+
+        async function runAllTests() {
+            await runTests(tests);
+        }
+
+        async function runBasicTests() {
+            const testsToRun = basicTests.map(index => tests[index]);
+            await runTests(testsToRun);
+        }
+
+        async function runTests(testsToRun) {
+            startTime = Date.now();
+            testResults = [];
+            errorLogs = [];
+            currentTestIndex = 0;
+
+            document.getElementById('stats').style.display = 'grid';
+            document.getElementById('progressBar').style.display = 'block';
+            document.getElementById('testResults').innerHTML = '';
+            document.getElementById('errorLogsContainer').style.display = 'none';
+
+            updateStats();
+            updateProgress();
+
+            for (let i = 0; i < testsToRun.length; i++) {
+                currentTestIndex = i;
+                updateProgress();
+                await runSingleTest(testsToRun[i], i);
+                updateStats();
+            }
+
+            updateProgress(100);
+            
+            if (errorLogs.length > 0) {
+                document.getElementById('errorLogsContainer').style.display = 'block';
+                document.getElementById('errorLogs').textContent = errorLogs.join('\n\n' + '='.repeat(80) + '\n\n');
+            }
+        }
+
+        async function runSingleTest(test, index) {
+            const testElement = createTestElement(test, index);
+            updateTestStatus(testElement, 'running');
+
+            try {
+                const baseUrl = document.getElementById('baseUrl').value;
+                const token = document.getElementById('testToken').value;
+                const url = baseUrl + test.url;
+
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+
+                if (token) {
+                    headers['Authorization'] = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+                }
+
+                const startTime = Date.now();
+                const response = await fetch(url, {
+                    method: test.method,
+                    headers: headers,
+                    mode: 'cors'
+                });
+
+                const duration = Date.now() - startTime;
+                let responseText = '';
+                let responseData = null;
+
+                try {
+                    responseText = await response.text();
+                    if (responseText) {
+                        responseData = JSON.parse(responseText);
+                    }
+                } catch (e) {
+                    // Не JSON ответ
+                }
+
+                const result = {
+                    test: test,
+                    success: test.expectError ? !response.ok : response.ok,
+                    status: response.status,
+                    statusText: response.statusText,
+                    duration: duration,
+                    responseData: responseData,
+                    responseText: responseText,
+                    headers: Object.fromEntries(response.headers.entries())
+                };
+
+                testResults.push(result);
+                updateTestResult(testElement, result);
+
+                if (!result.success) {
+                    logError(test, result);
+                }
+
+            } catch (error) {
+                const result = {
+                    test: test,
+                    success: false,
+                    error: error.message,
+                    duration: 0
+                };
+
+                testResults.push(result);
+                updateTestError(testElement, result);
+                logError(test, result, error);
+            }
+        }
+
+        function createTestElement(test, index) {
+            const testElement = document.createElement('div');
+            testElement.className = 'test-item';
+            testElement.id = `test-${index}`;
+            
+            testElement.innerHTML = `
+                <div class="test-header">
+                    <div class="test-status"></div>
+                    <div class="test-title">${test.name}</div>
+                    <div class="test-time"></div>
+                </div>
+                <div class="test-details">${test.description}</div>
+                <div class="test-response" style="display: none;"></div>
+            `;
+
+            document.getElementById('testResults').appendChild(testElement);
+            return testElement;
+        }
+
+        function updateTestStatus(testElement, status) {
+            testElement.className = `test-item ${status}`;
+            testElement.querySelector('.test-status').className = `test-status ${status}`;
+        }
+
+        function updateTestResult(testElement, result) {
+            const status = result.success ? 'success' : 'error';
+            updateTestStatus(testElement, status);
+            
+            testElement.querySelector('.test-time').textContent = `${result.duration}ms`;
+            
+            const responseDiv = testElement.querySelector('.test-response');
+            responseDiv.innerHTML = `
+                <strong>HTTP ${result.status} ${result.statusText}</strong><br>
+                <button class="collapse-btn" onclick="toggleResponse(this)">Показать ответ</button>
+                <div style="display: none; margin-top: 10px;">
+                    <strong>Headers:</strong><br>
+                    ${JSON.stringify(result.headers, null, 2)}<br><br>
+                    <strong>Response:</strong><br>
+                    ${result.responseText || 'Пустой ответ'}
+                </div>
+            `;
+            responseDiv.style.display = 'block';
+        }
+
+        function updateTestError(testElement, result) {
+            updateTestStatus(testElement, 'error');
+            
+            const responseDiv = testElement.querySelector('.test-response');
+            responseDiv.innerHTML = `
+                <strong>Ошибка:</strong> ${result.error}<br>
+                <button class="collapse-btn" onclick="toggleResponse(this)">Показать детали</button>
+                <div style="display: none; margin-top: 10px;">
+                    Детали ошибки будут в логах разработчика браузера (F12)
+                </div>
+            `;
+            responseDiv.style.display = 'block';
+        }
+
+        function toggleResponse(button) {
+            const content = button.nextElementSibling;
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                button.textContent = 'Скрыть ответ';
+            } else {
+                content.style.display = 'none';
+                button.textContent = 'Показать ответ';
+            }
+        }
+
+        function updateStats() {
+            const total = testResults.length;
+            const passed = testResults.filter(r => r.success).length;
+            const failed = total - passed;
+            const duration = Math.round((Date.now() - startTime) / 1000);
+
+            document.getElementById('totalTests').textContent = total;
+            document.getElementById('passedTests').textContent = passed;
+            document.getElementById('failedTests').textContent = failed;
+            document.getElementById('testDuration').textContent = duration;
+        }
+
+        function updateProgress(percentage) {
+            if (percentage === undefined) {
+                percentage = currentTestIndex === 0 ? 0 : (currentTestIndex / tests.length) * 100;
+            }
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+        }
+
+        function logError(test, result, error = null) {
+            let errorLog = `ОШИБКА ТЕСТА: ${test.name}\n`;
+            errorLog += `URL: ${document.getElementById('baseUrl').value}${test.url}\n`;
+            errorLog += `Метод: ${test.method}\n`;
+            errorLog += `Описание: ${test.description}\n`;
+            
+            if (error) {
+                errorLog += `JavaScript ошибка: ${error.message}\n`;
+                errorLog += `Stack trace: ${error.stack || 'Не доступен'}\n`;
+            }
+            
+            if (result.status) {
+                errorLog += `HTTP статус: ${result.status} ${result.statusText}\n`;
+            }
+            
+            if (result.responseText) {
+                errorLog += `Ответ сервера:\n${result.responseText}\n`;
+            }
+            
+            if (result.headers) {
+                errorLog += `Headers:\n${JSON.stringify(result.headers, null, 2)}\n`;
+            }
+            
+            errorLog += `Время выполнения: ${result.duration}ms\n`;
+            errorLog += `Ожидалась ошибка: ${test.expectError ? 'Да' : 'Нет'}\n`;
+            
+            errorLogs.push(errorLog);
+        }
+
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+            document.getElementById('stats').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('errorLogsContainer').style.display = 'none';
+            testResults = [];
+            errorLogs = [];
+        }
+
+        function copyErrorLogs() {
+            const logsText = errorLogs.join('\n\n' + '='.repeat(80) + '\n\n');
+            navigator.clipboard.writeText(logsText).then(() => {
+                alert('Логи ошибок скопированы в буфер обмена!');
+            }).catch(err => {
+                console.error('Ошибка копирования:', err);
+                // Fallback для старых браузеров
+                const textArea = document.createElement('textarea');
+                textArea.value = logsText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Логи ошибок скопированы в буфер обмена!');
+            });
+        }
+
+        // Автоматическое определение базового URL
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUrl = window.location.origin;
+            if (currentUrl.includes('localhost') || currentUrl.includes('127.0.0.1')) {
+                // Если тест запущен локально, пытаемся угадать URL API
+                const baseUrlInput = document.getElementById('baseUrl');
+                if (currentUrl.includes(':3000')) {
+                    baseUrlInput.value = 'http://localhost:8080/api';
+                } else if (currentUrl.includes(':8080')) {
+                    baseUrlInput.value = 'http://localhost:8080/api';
+                }
+            }
+        });
+        async function downloadOverviewTxt() {
+        try {
+            const response = await fetch('/api/dashboard/overview', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${sessionStorage.getItem('token') || ''}`
+                }
+            });
+
+            if (!response.ok) throw new Error(`Ошибка: ${response.status}`);
+
+            const result = await response.json();
+            if (!result.success) throw new Error('Не удалось получить данные');
+
+            const data = result.data;
+            const lines = [];
+
+            lines.push("==== ОБЗОР АВТОПАРКА ====\n");
+
+            lines.push(">> Автомобили:");
+            lines.push(`Всего: ${data.cars.total}`);
+            lines.push(`В работе: ${data.cars.inUse}`);
+            lines.push(`На ТО: ${data.cars.maintenance}`);
+            lines.push(`В ремонте: ${data.cars.repair}`);
+            lines.push(`Доступно: ${data.cars.available}\n`);
+
+            lines.push(">> Водители:");
+            lines.push(`Всего: ${data.drivers.total}`);
+            lines.push(`Допущены: ${data.drivers.allowed}`);
+            lines.push(`Не допущены: ${data.drivers.notAllowed}\n`);
+
+            lines.push(">> Заказы:");
+            lines.push(`Всего: ${data.orders.total}`);
+            lines.push(`Выполнено: ${data.orders.completed}`);
+            lines.push(`В работе: ${data.orders.inprogress}`);
+            lines.push(`Создано сегодня: ${data.orders.createdtoday}`);
+            lines.push(`Доход: ₽${data.orders.revenue}`);
+            lines.push(`Средняя стоимость: ₽${data.orders.avgcost}\n`);
+
+            lines.push(">> Расходы:");
+            lines.push(`Топливо: ₽${data.expenses.fuel}`);
+            lines.push(`Ремонт: ₽${data.expenses.repair}`);
+            lines.push(`ТО: ₽${data.expenses.maintenance}`);
+            lines.push(`Всего: ₽${data.expenses.total}`);
+            lines.push(`Тренд: ${data.expenses.trend}\n`);
+
+            lines.push(">> Последние события:");
+            data.recentActivity.forEach(act => {
+                const date = new Date(act.created_at).toLocaleString('ru-RU');
+                lines.push(`– ${date}: ${act.description}`);
+            });
+
+            const textContent = lines.join('\n');
+
+            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'overview.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+        } catch (error) {
+            alert('Ошибка при выгрузке: ' + error.message);
+            console.error(error);
+        }
+    }
+    </script>
+</body>
+</html>

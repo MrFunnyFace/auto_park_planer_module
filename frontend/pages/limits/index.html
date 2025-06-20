@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление лимитами - Система управления автопарком</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/limits.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                Система управления автопарком
+            </div>
+            <div id="user-info" class="u-info"></div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <div id="navigation-container"></div>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <h1 class="page-title">Управление лимитами</h1>
+        <div class="breadcrumb">Главная / Лимиты и ограничения</div>
+
+        <!-- Page Actions -->
+        <div class="page-actions">
+            <button class="btn btn-primary" onclick="openCreateLimitModal()">
+                ➕ Создать новый лимит
+            </button>
+            <button class="btn btn-secondary" onclick="showLimitsReport()">
+                📊 Отчет по лимитам
+            </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('active-limits')">Активные лимиты</div>
+            <div class="tab" onclick="switchTab('monitoring')">Мониторинг лимитов</div>
+            <div class="tab" onclick="switchTab('notifications')">Уведомления</div>
+        </div>
+
+        <!-- Active Limits Tab -->
+        <div id="active-limits" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <span>Активные лимиты</span>
+                    <span class="status status-active">12 активных</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Название лимита</th>
+                                    <th>Тип</th>
+                                    <th>Категория</th>
+                                    <th>Значение</th>
+                                    <th>Статус</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Дневной пробег грузовых</td>
+                                    <td>Дневной</td>
+                                    <td>Грузовые автомобили</td>
+                                    <td>300 км</td>
+                                    <td><span class="status status-active">Активен</span></td>
+                                    <td>
+                                        <button class="btn btn-warning" onclick="editLimit(1)">✏️ </button>
+                                        <button class="btn btn-danger" onclick="deleteLimit(1)">🗑️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Недельный расход топлива</td>
+                                    <td>Недельный</td>
+                                    <td>Все автомобили</td>
+                                    <td>150 л</td>
+                                    <td><span class="status status-active">Активен</span></td>
+                                    <td>
+                                        <button class="btn btn-warning" onclick="editLimit(2)">✏️</button>
+                                        <button class="btn btn-danger" onclick="deleteLimit(2)">🗑️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Месячный пробег легковых</td>
+                                    <td>Месячный</td>
+                                    <td>Легковые автомобили</td>
+                                    <td>2000 км</td>
+                                    <td><span class="status status-warning">Предупреждение</span></td>
+                                    <td>
+                                        <button class="btn btn-warning" onclick="editLimit(3)">✏️</button>
+                                        <button class="btn btn-danger" onclick="deleteLimit(3)">🗑️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Дневное топливо - доставка</td>
+                                    <td>Дневной</td>
+                                    <td>Служба доставки</td>
+                                    <td>45 л</td>
+                                    <td><span class="status status-active">Активен</span></td>
+                                    <td>
+                                        <button class="btn btn-warning" onclick="editLimit(4)">✏️</button>
+                                        <button class="btn btn-danger" onclick="deleteLimit(4)">🗑️</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monitoring Tab -->
+        <div id="monitoring" class="tab-content" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <span>Мониторинг использования лимитов</span>
+                    <button class="btn btn-secondary">🔄 Обновить</button>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Автомобиль/Водитель</th>
+                                    <th>Лимит</th>
+                                    <th>Использовано</th>
+                                    <th>Остаток</th>
+                                    <th>Статус</th>
+                                    <th>Прогресс</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>А123БВ777 / Иванов И.И.</td>
+                                    <td>300 км/день</td>
+                                    <td>245 км</td>
+                                    <td>55 км</td>
+                                    <td><span class="status status-warning">82%</span></td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill progress-yellow" style="width: 82%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>В456ГД777 / Петров П.П.</td>
+                                    <td>150 л/неделя</td>
+                                    <td>135 л</td>
+                                    <td>15 л</td>
+                                    <td><span class="status status-warning">90%</span></td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill progress-red" style="width: 90%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>С789ЕЖ777 / Сидоров С.С.</td>
+                                    <td>45 л/день</td>
+                                    <td>28 л</td>
+                                    <td>17 л</td>
+                                    <td><span class="status status-active">62%</span></td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill progress-green" style="width: 62%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Д012ЗИ777 / Козлов К.К.</td>
+                                    <td>2000 км/месяц</td>
+                                    <td>1850 км</td>
+                                    <td>150 км</td>
+                                    <td><span class="status status-warning">93%</span></td>
+                                    <td>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill progress-red" style="width: 93%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div id="notifications" class="tab-content" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <span>Настройка уведомлений</span>
+                    <button class="btn btn-primary" onclick="openNotificationModal()">⚙️ Настроить</button>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Тип уведомления</th>
+                                    <th>Уровень предупреждения</th>
+                                    <th>Способ оповещения</th>
+                                    <th>Получатели</th>
+                                    <th>Статус</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Превышение лимита пробега</td>
+                                    <td>80%, 90%, 100%</td>
+                                    <td>Email + SMS</td>
+                                    <td>Водитель, Планировщик</td>
+                                    <td><span class="status status-active">Включено</span></td>
+                                    <td>
+                                        <button class="btn btn-warning" onclick="editNotification(1)">✏️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Превышение лимита топлива</td>
+                                    <td>85%, 95%, 100%</td>
+                                    <td>В системе + Email</td>
+                                    <td>Диспетчер, Руководитель</td>
+                                    <td><span class="status status-active">Включено</span></td>
+                                    <td>
+                                        <button class="btn btn-warning" onclick="editNotification(2)">✏️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Приближение к лимиту</td>
+                                    <td>75%</td>
+                                    <td>В системе</td>
+                                    <td>Водитель</td>
+                                    <td><span class="status status-inactive">Отключено</span></td>
+                                    <td>
+                                        <button class="btn btn-warning" onclick="editNotification(3)">✏️</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Limit Modal -->
+    <div id="createLimitModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Создать новый лимит</h2>
+                <button class="close-btn" onclick="closeModal('createLimitModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Название лимита</label>
+                        <input type="text" class="form-input" placeholder="Введите название лимита">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Тип лимита</label>
+                        <select class="form-select">
+                            <option>Дневной</option>
+                            <option>Недельный</option>
+                            <option>Месячный</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Категория транспорта</label>
+                        <select class="form-select">
+                            <option>Все автомобили</option>
+                            <option>Грузовые автомобили</option>
+                            <option>Легковые автомобили</option>
+                            <option>Служба доставки</option>
+                            <option>Конкретный автомобиль</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Параметр лимитирования</label>
+                        <select class="form-select">
+                            <option>Километраж</option>
+                            <option>Литры топлива</option>
+                            <option>Время работы</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Значение лимита</label>
+                        <input type="number" class="form-input" placeholder="Введите значение">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Действие при превышении</label>
+                        <select class="form-select">
+                            <option>Только уведомление</option>
+                            <option>Требование одобрения</option>
+                            <option>Автоматический запрет</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="saveLimitSettings()">💾 Сохранить лимит</button>
+                    <button class="btn btn-secondary" onclick="closeModal('createLimitModal')">❌ Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" style="background: #2c3e50; color: white; text-align: center; padding: 2rem; margin-top: 3rem;">
+        <p>&copy; 2025 Система управления автопарком. Все права защищены.</p>
+    </footer>
+
+    <script src="../../assets/js/navigation.js"></script>
+
+    <script>
+        // Создаст навигацию автоматически
+        Navigation.createNavigation('navigation-container');
+        Navigation.displayUserInfo();
+    </script>
+    
+    <script>
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).style.display = 'block';
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Modal functions
+        function openCreateLimitModal() {
+            document.getElementById('createLimitModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function openNotificationModal() {
+            alert('Окно настройки уведомлений (будет реализовано в следующих версиях)');
+        }
+
+        // Limit management functions
+        function editLimit(id) {
+            alert(`Редактирование лимита #${id} (будет реализовано в следующих версиях)`);
+        }
+
+        function deleteLimit(id) {
+            if (confirm('Вы уверены, что хотите удалить этот лимит?')) {
+                alert(`Лимит #${id} удален`);
+            }
+        }
+
+        function saveLimitSettings() {
+            alert('Лимит сохранен (будет реализовано в следующих версиях)');
+            closeModal('createLimitModal');
+        }
+
+        function showLimitsReport() {
+            alert('Генерация отчета по лимитам (будет реализовано в следующих версиях)');
+        }
+
+        function editNotification(id) {
+            alert(`Редактирование настроек уведомлений #${id} (будет реализовано в следующих версиях)`);
+        }
+
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

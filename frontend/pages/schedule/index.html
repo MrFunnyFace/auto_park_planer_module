@@ -54,7 +54,7 @@
             
             <div class="control-group">
                 <label class="control-label">&nbsp;</label>
-                <button class="btn btn-success" onclick="openNewScheduleModal()">Создать расписание</button>
+                <button class="btn btn-primary" data-tooltip="Создать новое расписание для водителей">Создать расписание</button>
             </div>
         </div>
 
@@ -224,8 +224,24 @@
                 </div>
         
     <script src="../../assets/js/navigation.js"></script>
+    <script src="../../assets/js/tooltip.js"></script>
+    <script src="../../assets/js/toast.js"></script>
+
+    <script src="../../assets/js/onboarding.js"></script>
     <script>
     // Создаст навигацию автоматически
         Navigation.createNavigation('navigation-container');
         Navigation.displayUserInfo();
+        function loadSchedule() {
+            // имитация загрузки
+            Toast.info('Загрузка расписания...');
+            setTimeout(() => {
+                Toast.success('Расписание обновлено');
+            }, 1000);
+        }
+
+        function createSchedule() {
+            // здесь будет логика создания расписания
+            Toast.success('Новое расписание успешно создано');
+        }
     </script>

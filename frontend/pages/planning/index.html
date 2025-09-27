@@ -299,7 +299,115 @@
         <p>&copy; 2025 Система управления автопарком. Все права защищены.</p>
     </footer>
     <script src="../../assets/js/navigation.js"></script>
+    <script src="../../assets/js/tooltip.js"></script>
+    <script src="../../assets/js/toast.js">
+                        // Скрипт для показа Toast при создании расписания
+        function createScheduleWithToast() {
+            // Здесь логика создания расписания
+            // Имитируем процесс создания
+            
+            const formData = {
+                startDate: document.getElementById('startDate')?.value,
+                endDate: document.getElementById('endDate')?.value,
+                // другие поля формы
+            };
+            
+            // Проверяем заполнение обязательных полей
+            if (!formData.startDate || !formData.endDate) {
+                Toast.error('Пожалуйста, заполните все обязательные поля');
+                return;
+            }
+            
+            // Имитируем отправку данных на сервер
+            // В реальном приложении здесь будет AJAX запрос
+            setTimeout(() => {
+                // Успешное создание
+                Toast.success('Расписание успешно создано!');
+                
+                // Дополнительные действия после создания
+                // Например, очистка формы или обновление таблицы
+                clearScheduleForm();
+                updateScheduleTable();
+            }, 1000);
+        }
 
+        // Функция очистки формы
+        function clearScheduleForm() {
+            const form = document.getElementById('scheduleForm');
+            if (form) {
+                form.reset();
+            }
+        }
+
+        // Функция обновления таблицы расписаний
+        function updateScheduleTable() {
+            // Здесь код для обновления отображения расписаний
+            console.log('Обновление таблицы расписаний...');
+        }
+
+        // Привязка к кнопке создания расписания
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ищем кнопку создания расписания и привязываем обработчик
+            const createButton = document.querySelector('button[onclick="openNewScheduleModal()"]');
+            if (createButton) {
+                // Заменяем стандартное поведение
+                createButton.onclick = function() {
+                    openNewScheduleModal();
+                };
+            }
+            
+            // Обработчик для формы в модальном окне
+            const scheduleForm = document.getElementById('scheduleForm');
+            if (scheduleForm) {
+                scheduleForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    createScheduleWithToast();
+                    // Закрываем модальное окно
+                    closeModal('newScheduleModal');
+                });
+            }
+        });
+
+        // Другие примеры использования Toast для различных действий
+        function saveScheduleChanges() {
+            // Имитация сохранения изменений
+            Toast.info('Сохранение изменений...');
+            
+            setTimeout(() => {
+                Toast.success('Изменения в расписании сохранены');
+            }, 800);
+        }
+
+        function deleteScheduleItem() {
+            Toast.warning('Элемент расписания удален');
+        }
+
+        function validateScheduleConflict() {
+            Toast.error('Обнаружен конфликт в расписании. Проверьте назначения водителей.');
+        }
+
+        // Функция для показа различных типов уведомлений
+        function showScheduleNotifications() {
+            // Примеры различных уведомлений для расписаний
+            
+            // При превышении рабочих часов
+            Toast.warning('Внимание: водитель превышает допустимые рабочие часы');
+            
+            // При успешном назначении
+            Toast.success('Водитель успешно назначен на смену');
+            
+            // При ошибке валидации
+            Toast.error('Невозможно назначить водителя: отсутствует медицинский допуск');
+            
+            // Информационное сообщение
+            Toast.info('Расписание на следующую неделю требует утверждения');
+        }
+
+    </script>
+
+
+
+    <script src="../../assets/js/onboarding.js"></script>
     <script>
         // Создаст навигацию автоматически
         Navigation.createNavigation('navigation-container');

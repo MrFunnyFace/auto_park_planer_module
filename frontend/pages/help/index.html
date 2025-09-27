@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Справка - Система управления автопарком</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .faq-question:hover {
+            background: #f8f9fa;
+        }
+        .faq-answer {
+            padding: 1.5rem;
+            display: none;
+            color: #666;
+            line-height: 1.6;
+        }
+        .faq-answer.active {
+            display: block;
+        }
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        .faq-icon.rotated {
+            transform: rotate(180deg);
+        }
+        .search-box {
+            margin-bottom: 2rem;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Система управления автопарком</div>
+            <div id="user-info" class="u-info"></div>
+        </div>
+    </header>
+
+    <div id="navigation-container"></div>
+
+    <main class="main-container">
+        <h1 class="page-title">Справочный центр</h1>
+        <div class="breadcrumb">Главная / Справка</div>
+
+        <div class="faq-container">
+            <div class="search-box">
+                <input type="text" id="faq-search" placeholder="Поиск по вопросам...">
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Как создать расписание для водителей?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Для создания расписания выполните следующие шаги:</p>
+                    <ol>
+                        <li>Перейдите в раздел "График работы"</li>
+                        <li>Нажмите кнопку "Создать расписание"</li>
+                        <li>Выберите период планирования</li>
+                        <li>Назначьте водителей на смены</li>
+                        <li>Сохраните и опубликуйте расписание</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Как установить лимиты расходов?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Для установки лимитов:</p>
+                    <ol>
+                        <li>Откройте раздел "Управление лимитами"</li>
+                        <li>Нажмите "Создать новый лимит"</li>
+                        <li>Выберите тип лимита (километраж, топливо, время)</li>
+                        <li>Укажите значение и период действия</li>
+                        <li>Настройте уведомления при превышении</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Как просмотреть отчет по расходам?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Для просмотра отчетов по расходам:</p>
+                    <ol>
+                        <li>Перейдите в "Экономика автопарка"</li>
+                        <li>Выберите период анализа</li>
+                        <li>Настройте фильтры по типу расходов</li>
+                        <li>Нажмите "Обновить" для загрузки данных</li>
+                        <li>Используйте кнопку "Отчет" для экспорта</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Как прогнозировать потребность в транспорте?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Система прогнозирования позволяет:</p>
+                    <ul>
+                        <li>Анализировать историческую нагрузку</li>
+                        <li>Учитывать сезонные факторы</li>
+                        <li>Планировать ресурсы на будущие периоды</li>
+                        <li>Получать рекомендации по оптимизации</li>
+                    </ul>
+                    <p>Перейдите в раздел "Планирование ресурсов" и следуйте подсказкам системы.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Что означают статусы в системе?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Цветовые обозначения статусов:</p>
+                    <ul>
+                        <li><span style="color: #27ae60;">Зеленый</span> - норма, активное состояние</li>
+                        <li><span style="color: #f39c12;">Оранжевый</span> - предупреждение, требует внимания</li>
+                        <li><span style="color: #e74c3c;">Красный</span> - критическое состояние, требует действий</li>
+                        <li><span style="color: #3498db;">Синий</span> - информационный статус</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Как получить техническую поддержку?</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Для получения технической поддержки:</p>
+                    <ul>
+                        <li>Обратитесь к системному администратору</li>
+                        <li>Проверьте данный справочный раздел</li>
+                        <li>Используйте встроенные подсказки (наведите курсор на элементы интерфейса)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Система управления автопарком. Все права защищены.</p>
+    </footer>
+
+    <script src="../../assets/js/navigation.js"></script>
+    <script>
+        Navigation.createNavigation('navigation-container');
+        Navigation.displayUserInfo();
+
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.faq-icon');
+            
+            answer.classList.toggle('active');
+            icon.classList.toggle('rotated');
+        }
+
+        // Поиск по FAQ
+        document.getElementById('faq-search').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
